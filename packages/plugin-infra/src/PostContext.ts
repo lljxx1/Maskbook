@@ -11,6 +11,7 @@ import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Result } from 'ts-results'
 import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
+import { useWhatChanged } from '@simbathesailor/use-what-changed'
 export interface PostContextSNSActions {
     /** Parse payload into Payload */
     payloadParser(raw: string): Result<Payload, Error>
@@ -91,6 +92,18 @@ export type PostInfo = PostContext
 
 const Context = createContext<PostContext | null>(null)
 export const PostInfoProvider = memo((props: React.PropsWithChildren<{ post: PostInfo }>) => {
+    console.log('DEBUG: PostInfoProvider')
+
+    useWhatChanged([
+        props.post.author,
+        props.post.avatarURL,
+        props.post.comment,
+        props.post.nickname,
+        props.post.identifier,
+        props.post.mentionedLinks,
+        props.post,
+    ])
+
     return createElement(Context.Provider, { value: props.post, children: props.children })
 })
 export function usePostInfo(): PostContext | null {

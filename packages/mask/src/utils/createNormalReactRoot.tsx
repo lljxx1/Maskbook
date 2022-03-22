@@ -16,10 +16,10 @@ export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement)
     }
 
     return createRoot(container).render(
-        <StrictMode>
-            <DisableShadowRootContext.Provider value>
-                <ErrorBoundary>{jsx}</ErrorBoundary>
-            </DisableShadowRootContext.Provider>
-        </StrictMode>,
+        // <StrictMode>
+        <DisableShadowRootContext.Provider value>
+            <ErrorBoundary>{jsx}</ErrorBoundary>
+        </DisableShadowRootContext.Provider>,
+        // </StrictMode>,
     )
 }

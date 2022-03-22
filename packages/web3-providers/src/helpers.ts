@@ -14,6 +14,7 @@ export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestIn
 }
 
 const CORS_PROXY = 'https://cors.r2d2.to'
+
 export function courier(url: string) {
     return urlcat(`${CORS_PROXY}?:url`, { url })
 }

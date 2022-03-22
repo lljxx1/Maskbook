@@ -1,47 +1,61 @@
 import { memo } from 'react'
+import { noop } from 'lodash-unified'
+import { makeStyles } from '@masknet/theme'
+import { EMPTY_OBJECT } from '@masknet/shared-base'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '../../PostInfo'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector'
-import { makeStyles } from '@masknet/theme'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
-import { noop } from 'lodash-unified'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
-    additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => ({}),
-    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
+    additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => EMPTY_OBJECT,
+    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()(EMPTY_OBJECT) as any,
 ) {
-    const PostInspectorDefault = memo(function PostInspectorDefault(props: {
-        onDecrypted: PostInspectorProps['onDecrypted']
-        zipPost: PostInspectorProps['needZip']
-    }) {
-        const { onDecrypted, zipPost } = props
-        const { classes } = useCustomStyles()
-        const additionalProps = additionalPropsToPostInspector(classes)
-        return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
-    })
+    const PostInspectorDefault = memo(
+        function PostInspectorDefault(props: {
+            onDecrypted: PostInspectorProps['onDecrypted']
+            zipPost: PostInspectorProps['needZip']
+        }) {
+            const { onDecrypted, zipPost } = props
+            const { classes } = useCustomStyles()
+            const additionalProps = additionalPropsToPostInspector(classes)
+            return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
+        },
+        (a, b) => {
+            console.log('DEBUG: comparesion')
+            console.log({
+                a,
+                b,
+            })
+            return false
+        },
+    )
 
-    const { zipPost, injectionPoint } = config
-    const zipPostF = zipPost || noop
+    const { zipPost = noop, injectionPoint } = config
     return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
-        const jsx = (
+        console.log('DEBUG: injectPostInspector')
+
+        const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
+            key: 'post-inspector',
+            signal,
+        })
+        root.render(
             <PostInfoProvider post={current}>
                 <PostInspectorDefault
                     onDecrypted={(typed) => {
                         current.rawMessagePiped.value = typed
                     }}
-                    zipPost={() => zipPostF(current.rootElement)}
+                    zipPost={() => zipPost(current.rootElement)}
                     {...current}
                 />
-            </PostInfoProvider>
+            </PostInfoProvider>,
         )
-        const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
-            key: 'post-inspector',
-            signal,
-        })
-        root.render(jsx)
-        return root.destory
+        return () => {
+            console.log('DEBUG: destroy!')
+            root.destroy()
+        }
     }
 }
 

@@ -17,6 +17,16 @@ export function useAsset(address: string, tokenId: string, provider: NonFungible
     const { WNATIVE_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
+        // console.log('DEBUG: useAsset')
+        // console.log({
+        //     account,
+        //     chainId,
+        //     WNATIVE_ADDRESS,
+        //     address,
+        //     tokenId,
+        //     provider,
+        // })
+
         const asset = await EVM_RPC.getAsset({ address, tokenId, chainId, provider })
         return {
             ...asset,

@@ -16,7 +16,7 @@ if (import.meta.webpackHot) {
 }
 
 createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <Dashboard />
-    </StrictMode>,
+    // <StrictMode>
+    <Dashboard />,
+    // </StrictMode>,
 )

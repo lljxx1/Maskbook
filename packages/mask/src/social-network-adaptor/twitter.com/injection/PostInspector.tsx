@@ -4,6 +4,7 @@ import { injectPostInspectorDefault } from '../../../social-network/defaults/inj
 import { twitterEncoding } from '../encoding'
 
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
+    console.log('DEBUG: injectPostInspectorAtTwitter injectPostInspectorAtTwitter')
     return injectPostInspectorDefault({
         zipPost(node) {
             const contentContainer = node.current.parentElement

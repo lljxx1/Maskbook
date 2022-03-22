@@ -139,6 +139,13 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
 
         useImperativeHandle(ref, () => ({ setWidth, setWrap: setOpen, setWrapperName: setTitle }), [])
 
+        // console.log('DEBUG: MaskPostExtraPluginWrapper')
+        // console.log({
+        //     open,
+        //     title,
+        //     width,
+        // })
+
         if (!open) return <>{props.children}</>
         return (
             <MaskPostExtraInfoWrapper

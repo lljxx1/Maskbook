@@ -18,6 +18,7 @@ import {
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
@@ -172,7 +173,7 @@ export function createRefsForCreatePostContext() {
         snsID: SubscriptionFromValueRef(postID),
         rawMessage: SubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
-            getCurrentValue: () => [...postMetadataImages],
+            getCurrentValue: () => (postMetadataImages.size ? [...postMetadataImages] : EMPTY_LIST),
             subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
         }),
         postMentionedLinksProvider: debug({

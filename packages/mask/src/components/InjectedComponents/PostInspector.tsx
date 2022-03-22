@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
 import Services from '../../extension/service'
-import { ProfileIdentifier, type PayloadAlpha40_Or_Alpha39, type PayloadAlpha38 } from '@masknet/shared-base'
+import {
+    ProfileIdentifier,
+    type PayloadAlpha40_Or_Alpha39,
+    type PayloadAlpha38,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
@@ -12,10 +17,16 @@ import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
+import { setUseWhatChange, useWhatChanged } from '@simbathesailor/use-what-changed'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
-    (plugin) => plugin.PostInspector,
+    (plugin) => {
+        // console.log('DEBUG: post inspector filter')
+        // console.log(plugin)
+
+        return plugin.PostInspector
+    },
     MaskPostExtraPluginWrapper,
 )
 
@@ -33,14 +44,16 @@ export function PostInspector(props: PostInspectorProps) {
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
-    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
+    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>(EMPTY_LIST)
 
     const { value: sharedListOfPost } = useAsync(async () => {
-        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
+        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return EMPTY_LIST
         const { iv, version } = encryptedPost.val
         return Services.Crypto.getPartialSharedListOfPost(version, iv, postBy)
     }, [postBy, whoAmI, encryptedPost])
-    useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
+    useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? EMPTY_LIST), [sharedListOfPost])
+
+    // useWhatChanged([postBy, encryptedPost, decryptedPayloadForImage, postImages, isDebugging, whoAmI, friends])
 
     if (encryptedPost.ok || postImages.length) {
         if (!isDebugging) props.needZip()

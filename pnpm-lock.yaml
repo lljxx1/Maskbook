@@ -72,7 +72,6 @@ importers:
       '@mui/lab': 5.0.0-alpha.72_154258abcf19999eeddd92026c0a2f6c
       '@mui/material': 5.5.0_daa021359a87c07543264c0518ec626c
       '@mui/system': 5.5.0_b402f089c119e77071a0bfc88393bc7a
-      '@simbathesailor/use-what-changed': 2.0.0_react@18.0.0-rc.2
       '@types/masknet__global-types': link:packages/polyfills/types
       '@types/react': 17.0.40
       '@types/react-dom': 17.0.13
@@ -97,6 +96,7 @@ importers:
       '@masknet/cli': link:packages/scripts
       '@masknet/serializer': link:packages/test-serializer
       '@nice-labs/git-rev': 3.5.0
+      '@simbathesailor/use-what-changed': 2.0.0_react@18.0.0-rc.2
       '@swc/core': 1.2.148
       '@types/lodash-es': 4.17.6
       '@typescript-eslint/experimental-utils': 5.14.0_eslint@8.10.0+typescript@4.6.2
@@ -6049,7 +6049,7 @@ packages:
       react: '>=16'
     dependencies:
       react: 18.0.0-rc.2
-    dev: false
+    dev: true
 
   /@sinclair/typebox/0.23.4:
     resolution: {integrity: sha512-0/WqSvpVbCBAV1yPeko7eAczKbs78dNVAaX14quVlwOb2wxfKuXCx91h4NrEfkYK9zEnyVSW4JVI/trP3iS+Qg==}

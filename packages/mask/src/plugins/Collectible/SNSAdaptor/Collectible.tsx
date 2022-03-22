@@ -112,10 +112,10 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(8, 0),
         },
         markdown: {
-            'text-overflow': 'ellipsis',
+            textOverflow: 'ellipsis',
             display: '-webkit-box',
-            '-webkit-box-orient': 'vertical',
-            '-webkit-line-clamp': '3',
+            webkitBoxOrient: 'vertical',
+            webkitLineClamp: '3',
         },
     }
 })
@@ -163,19 +163,19 @@ export function Collectible(props: CollectibleProps) {
         )
     const tabs = [
         <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,
-        <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
-        <Tab className={classes.tab} key="offers" label={t('plugin_collectible_offers')} />,
-        <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />,
-        <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
+        // <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
+        // <Tab className={classes.tab} key="offers" label={t('plugin_collectible_offers')} />,
+        // <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />,
+        // <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
 
     const renderTab = (tabIndex: CollectibleTab) => {
         const tabMap: Record<CollectibleTab, ReactElement> = {
             [CollectibleTab.ARTICLE]: <ArticleTab />,
-            [CollectibleTab.TOKEN]: <TokenTab />,
-            [CollectibleTab.OFFER]: <OfferTab />,
-            [CollectibleTab.LISTING]: <ListingTab />,
-            [CollectibleTab.HISTORY]: <HistoryTab />,
+            [CollectibleTab.TOKEN]: <></>, // <TokenTab />,
+            [CollectibleTab.OFFER]: <></>, // <OfferTab />,
+            [CollectibleTab.LISTING]: <></>, // <ListingTab />,
+            [CollectibleTab.HISTORY]: <></>, // <HistoryTab />,
         }
 
         return tabMap[tabIndex] || null
@@ -264,11 +264,13 @@ export function Collectible(props: CollectibleProps) {
                         {tabs}
                     </Tabs>
                     <Paper className={classes.body}>
-                        {(asset.loading && (
+                        {asset.loading ? (
                             <div className={classes.loading}>
                                 <LoadingAnimation />
                             </div>
-                        )) || <>{renderTab(tabIndex)}</>}
+                        ) : (
+                            <>{renderTab(tabIndex)}</>
+                        )}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>

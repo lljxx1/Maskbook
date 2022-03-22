@@ -23,6 +23,7 @@
   "dependencies": {
     "@masknet/icons": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@types/qrcode": "^1.4.2",
     "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",

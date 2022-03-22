@@ -7,6 +7,9 @@ import { PLUGIN_ID } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
+import { setUseWhatChange, useWhatChanged } from '@simbathesailor/use-what-changed'
+
+setUseWhatChange(true)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,16 +18,23 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
-        usePluginWrapper(!!asset)
+        // usePluginWrapper(!!asset)
+
+        // useWhatChanged([links])
+
+        // console.log('DEBUG: PostInspector')
+        // console.log(asset)
+
         return asset ? <PostInspector payload={asset} /> : null
     },
     DecryptedInspector: function Component(props) {
-        const collectibleUrl = getRelevantUrl(
-            extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''),
-        )
-        const asset = getAssetInfoFromURL(collectibleUrl)
-        usePluginWrapper(!!asset)
-        return asset ? <PostInspector payload={asset} /> : null
+        return null
+        // const collectibleUrl = getRelevantUrl(
+        //     extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''),
+        // )
+        // const asset = getAssetInfoFromURL(collectibleUrl)
+        // usePluginWrapper(!!asset)
+        // return asset ? <PostInspector payload={asset} /> : null
     },
     ProfileTabs: [
         {

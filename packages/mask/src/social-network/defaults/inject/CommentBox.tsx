@@ -62,7 +62,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
                 </PostInfoProvider>,
             )
-            return root.destory
+            return root.destroy
         })
         startWatch(commentBoxWatcher, signal)
         return () => commentBoxWatcher.stopWatch()

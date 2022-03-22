@@ -4,6 +4,9 @@ import { ShadowRootIsolation } from '@masknet/theme'
 import type { Plugin } from '../types'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
 import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+import { useWhatChanged, setUseWhatChange } from '@simbathesailor/use-what-changed'
+
+setUseWhatChange(true)
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
@@ -33,6 +36,10 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const t = usePluginI18NField()
         const props = useContext(PropsContext)
         const ui = pickInjectorHook(plugin)
+
+        // console.log('DEBUG: SinglePluginWithinErrorBoundary')
+        // console.log(ui)
+
         return usePluginWrapperProvider(
             ui ? (
                 <ErrorBoundary subject={'Plugin ' + t(plugin.ID, plugin.name)}>
@@ -43,17 +50,19 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         )
     }
     function PluginsInjectionHookRender(props: PropsType) {
-        const all = usePlugins()
-            .filter(pickInjectorHook)
-            .map((plugin) => (
-                <PropsContext.Provider key={plugin.ID} value={props}>
-                    <ShadowRootIsolation data-plugin={plugin.ID}>
-                        <SinglePluginWithinErrorBoundary plugin={plugin} />
-                    </ShadowRootIsolation>
-                </PropsContext.Provider>
-            ))
+        const plugins = usePlugins().filter(pickInjectorHook)
+
+        const all = plugins.map((plugin) => (
+            <PropsContext.Provider key={plugin.ID} value={props}>
+                <ShadowRootIsolation data-plugin={plugin.ID}>
+                    <SinglePluginWithinErrorBoundary plugin={plugin} />
+                </ShadowRootIsolation>
+            </PropsContext.Provider>
+        ))
+
         return <>{all}</>
     }
+
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
         return (
             <span data-plugin-render="">

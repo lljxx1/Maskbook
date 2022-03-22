@@ -3,13 +3,23 @@ import { ChainId, createExternalProvider } from '@masknet/web3-shared-evm'
 import { request } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, ReferrerAddress } from '../constants'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
+
+const resolveOpenSeaBaseURL = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, string>(
+    {
+        [ChainId.Mainnet]: 'https://api.opensea.io',
+        [ChainId.Rinkeby]: 'https://testnets-api.opensea.io',
+    },
+    '',
+)
 
 function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
     return new OpenSeaPort(
         createExternalProvider(request),
         {
             networkName: resolveOpenSeaNetwork(chainId),
-            apiKey: OpenSeaAPI_Key,
+            // apiKey: OpenSeaAPI_Key,
+            apiBaseUrl: `https://cors.r2d2.to/?${resolveOpenSeaBaseURL(chainId)}`,
         },
         console.log,
     )

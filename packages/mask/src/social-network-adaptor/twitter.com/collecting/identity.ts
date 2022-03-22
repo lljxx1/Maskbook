@@ -17,6 +17,7 @@ function resolveLastRecognizedIdentityInner(
         const handle = selfInfoSelectors().handle.evaluate()
         const nickname = selfInfoSelectors().name.evaluate()
         const avatar = selfInfoSelectors().userAvatar.evaluate()
+
         if (!isNil(handle)) {
             ref.value = {
                 identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),

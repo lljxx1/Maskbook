@@ -3,12 +3,12 @@ import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
 import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
-    CryptoPrice,
     NetworkType,
+    CryptoPrice,
     ProviderType,
     FungibleAssetProvider,
     NonFungibleAssetProvider,
-} from '../../../web3-shared/evm'
+} from '../../../public-api'
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance

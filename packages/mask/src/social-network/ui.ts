@@ -159,6 +159,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         if (!posts) return
         const abortSignals = new WeakMap<object, AbortController>()
         posts.event.on('set', async (key, value) => {
+            console.log('DEBUG: set set set !!!!!')
             await unmount(key)
             const abort = new AbortController()
             signal.addEventListener('abort', () => abort.abort())

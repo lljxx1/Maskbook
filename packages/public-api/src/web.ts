@@ -177,7 +177,6 @@ export enum LaunchPage {
     dashboard = 'dashboard',
 }
 
-// This type MUST be sync with NetworkType in packages/web3-shared/src/types/index.ts
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
@@ -198,6 +197,28 @@ export enum DataProvider {
     COIN_GECKO = 0,
     COIN_MARKET_CAP = 1,
     UNISWAP_INFO = 2,
+}
+
+export enum ProviderType {
+    MaskWallet = 'Maskbook',
+    MetaMask = 'MetaMask',
+    WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
+    Coin98 = 'Coin98',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
+    CustomNetwork = 'CustomNetwork',
+}
+
+export enum FungibleAssetProvider {
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
+}
+
+export enum NonFungibleAssetProvider {
+    OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
 }
 
 export enum TradeProvider {
@@ -234,4 +255,13 @@ export enum SupportedLanguages {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
+}
+
+export interface PriceRecord {
+    [currency: string]: number
+}
+
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
 }

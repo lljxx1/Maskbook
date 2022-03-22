@@ -23,9 +23,10 @@ export function usePluginWrapper(open: boolean, options?: { width?: number; name
     const { width, name } = options || {}
 
     useEffect(() => {
+        // console.log(`DEBUG: open changed to ${open}`)
         setWrap(open)
-        return () => setWrap(false)
-    }, [open, setWrap])
+        // return () => setWrap(false)
+    }, [open])
     useEffect(() => setWidth(width), [width, setWidth])
     useEffect(() => setWrapperName(name), [name, setWrapperName])
 }

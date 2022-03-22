@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
+import { NOOP } from '@masknet/shared-base'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
 import { PreventEventPropagationListContext } from './Contexts'
 
@@ -25,7 +26,7 @@ export interface CreateRenderInShadowRootHostConfig {
 export interface ReactRootShadowed {
     render(jsx: React.ReactChild): void
     // do not name it as unmount otherwise it might be compatible with ReactDOM's Root interface.
-    destory(): void
+    destroy(): void
 }
 /**
  * @returns
@@ -43,7 +44,6 @@ export function createReactRootShadowedPartial(hostConfig: CreateRenderInShadowR
         function tryRender(): void {
             if (options.signal?.aborted) return
             if (shadowRoot.host?.parentNode === null) return void setTimeout(tryRender, 20)
-
             root = mount(jsx, shadowRoot, options, hostConfig)
         }
         tryRender()
@@ -52,7 +52,7 @@ export function createReactRootShadowedPartial(hostConfig: CreateRenderInShadowR
                 if (!root) jsx = _jsx
                 else root.render(_jsx)
             },
-            destory: () => root?.destory(),
+            destroy: () => root?.destroy(),
         }
     }
 }
@@ -68,8 +68,8 @@ function mount(
     if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
-            destory: () => {},
-            render: () => {},
+            destroy: NOOP,
+            render: NOO,
         }
     }
 
@@ -96,18 +96,18 @@ function mount(
     options.signal?.addEventListener('abort', () => controller.abort(), { signal })
 
     return {
-        destory: () => controller.abort(),
+        destroy: () => controller.abort(),
         render: (jsx) => {
             root!.render(getJSX(jsx))
         },
     }
     function getJSX(jsx: React.ReactChild) {
         return (
-            <StrictMode>
-                <PreventEventPropagationListContext.Provider value={preventEventPropagationList}>
-                    <ShadowRootStyleProvider shadow={shadow}>{wrapJSX ? wrapJSX(jsx) : jsx}</ShadowRootStyleProvider>
-                </PreventEventPropagationListContext.Provider>
-            </StrictMode>
+            // <StrictMode>
+            <PreventEventPropagationListContext.Provider value={preventEventPropagationList}>
+                <ShadowRootStyleProvider shadow={shadow}>{wrapJSX ? wrapJSX(jsx) : jsx}</ShadowRootStyleProvider>
+            </PreventEventPropagationListContext.Provider>
+            // </StrictMode>
         )
     }
 }
