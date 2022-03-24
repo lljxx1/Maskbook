@@ -53,7 +53,7 @@ import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
-export { restoreFromBase64, restoreFromBackup } from '../../../background/services/backup/restore'
+export { mobile_restoreFromBase64, mobile_restoreFromBackup } from '../../../background/services/backup/restore'
 
 assertEnvironment(Environment.ManifestBackground)
 
